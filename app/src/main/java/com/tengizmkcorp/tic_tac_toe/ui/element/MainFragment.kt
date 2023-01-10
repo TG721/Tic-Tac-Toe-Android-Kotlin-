@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import androidx.navigation.fragment.findNavController
 import com.tengizmkcorp.tic_tac_toe.databinding.FragmentMainBinding
 import com.tengizmkcorp.tic_tac_toe.ui.common.BaseFragment
 
@@ -18,5 +19,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
             spannableStringTitle.setSpan(fcsBlue, 8, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             TVTitle.text = spannableStringTitle
         }
+    }
+
+    override fun listeners() {
+        binding.apply {
+            btnPlay.setOnClickListener {
+                goToGameFragment()
+            }
+        }
+    }
+
+    private fun goToGameFragment() {
+        findNavController().navigate(MainFragmentDirections.actionMainFragmentToGameFragment())
+
     }
 }
