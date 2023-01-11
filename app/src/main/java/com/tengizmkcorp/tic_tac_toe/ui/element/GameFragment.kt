@@ -1,6 +1,8 @@
 package com.tengizmkcorp.tic_tac_toe.ui.element
 
-import android.graphics.Typeface
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,11 +15,11 @@ import com.tengizmkcorp.tic_tac_toe.ui.common.ItemOffsetDecoration
 import com.tengizmkcorp.tic_tac_toe.ui.model.Cell
 import com.tengizmkcorp.tic_tac_toe.ui.model.VALUES
 
+
 class GameFragment : BaseFragment<FragmentGameBinding>(FragmentGameBinding::inflate) {
     private lateinit var cellItemAdapter: CellItemAdapter
     private var cellList = mutableListOf<Cell>()
     private var numberOfOccupiedCells = 0
-    private var gameOver = false
     private var result = ""
     override fun setup() {
         setupRecycler()
@@ -43,50 +45,76 @@ class GameFragment : BaseFragment<FragmentGameBinding>(FragmentGameBinding::infl
             if (numberOfOccupiedCells % 2 == 0) {
                 cellList[pos].xVisibility = true
                 cellList[pos].value = VALUES.X
-                binding.xCardTitle.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                binding.xCardTitle.setTextColor(ContextCompat.getColor(requireContext(),
+                    R.color.black))
 //                binding.oCardTitle.setTypeface(null, Typeface.BOLD);
 //                binding.xCardTitle.setTypeface(null, Typeface.NORMAL);
-                binding.oCardTitle.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                binding.oCardTitle.setTextColor(ContextCompat.getColor(requireContext(),
+                    R.color.white))
                 binding.IVOArrow.visibility = View.VISIBLE
                 binding.IVXArrow.visibility = View.GONE
-            }
-            else {
+            } else {
                 cellList[pos].oVisibility = true
                 cellList[pos].value = VALUES.O
 //                binding.xCardTitle.setTypeface(null, Typeface.BOLD);
 //                binding.oCardTitle.setTypeface(null, Typeface.NORMAL);
-                binding.xCardTitle.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                binding.oCardTitle.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                binding.xCardTitle.setTextColor(ContextCompat.getColor(requireContext(),
+                    R.color.white))
+                binding.oCardTitle.setTextColor(ContextCompat.getColor(requireContext(),
+                    R.color.black))
                 binding.IVXArrow.visibility = View.VISIBLE
                 binding.IVOArrow.visibility = View.GONE
             }
-            cellItemAdapter.notifyDataSetChanged()
+            cellItemAdapter.notifyItemChanged(pos)
             numberOfOccupiedCells++
             //check if any player has won
-            if(
-                (cellList[0].value==cellList[1].value && cellList[1].value == cellList[2].value)
-                || (cellList[0].value==cellList[3].value && cellList[3].value == cellList[6].value)
-                || (cellList[2].value==cellList[5].value && cellList[5].value == cellList[8].value)
-                || (cellList[1].value==cellList[4].value && cellList[4].value == cellList[7].value)
-                || (cellList[6].value==cellList[7].value && cellList[7].value == cellList[8].value)
-                || (cellList[3].value==cellList[4].value && cellList[4].value == cellList[5].value)
-                || (cellList[0].value==cellList[4].value && cellList[4].value == cellList[8].value)
-                || (cellList[2].value==cellList[5].value && cellList[5].value == cellList[6].value)
+            if (
+                (cellList[0].value == cellList[1].value && cellList[1].value == cellList[2].value && cellList[2].value != VALUES.NONE)
+                || (cellList[0].value == cellList[3].value && cellList[3].value == cellList[6].value && cellList[6].value != VALUES.NONE)
+                || (cellList[2].value == cellList[5].value && cellList[5].value == cellList[8].value && cellList[8].value != VALUES.NONE)
+                || (cellList[1].value == cellList[4].value && cellList[4].value == cellList[7].value && cellList[7].value != VALUES.NONE)
+                || (cellList[6].value == cellList[7].value && cellList[7].value == cellList[8].value && cellList[8].value != VALUES.NONE)
+                || (cellList[3].value == cellList[4].value && cellList[4].value == cellList[5].value && cellList[5].value != VALUES.NONE)
+                || (cellList[0].value == cellList[4].value && cellList[4].value == cellList[8].value && cellList[8].value != VALUES.NONE)
+                || (cellList[2].value == cellList[4].value && cellList[4].value == cellList[6].value && cellList[6].value != VALUES.NONE)
             ) {
-                result = if(binding.IVOArrow.visibility == View.VISIBLE)
+                //check if tie
+                result = if (binding.IVOArrow.visibility == View.VISIBLE)
                     "Player 1 won"
                 else "Player 2 won"
-            }
-            else if(numberOfOccupiedCells==9)
-            {
-                result = "Game over, Tie"
+                callAlertDialog(result)
+            } else if (numberOfOccupiedCells == 9) {
+                result = "Tie"
+                callAlertDialog(result)
             }
         }
     }
 
-    override fun listeners() {
-        binding.apply {
+    private fun callAlertDialog(result: String) {
+        val builder = AlertDialog.Builder(requireContext())
+            .setTitle("Game Over")
+            .setMessage(result)
+            .setNeutralButton("Close", DialogInterface.OnClickListener { _, _ ->
+                for (i in 0..8) clearCells()
+            })
 
-        }
+        val dialog = builder.create()
+        dialog.window!!.attributes.windowAnimations = R.style.DialogBoxAnimation
+        dialog.show()
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun clearCells() {
+        for (i in 0..8) cellList[i] = Cell(false, false, VALUES.NONE)
+        cellItemAdapter.notifyDataSetChanged()
+        binding.xCardTitle.setTextColor(ContextCompat.getColor(requireContext(),
+            R.color.white))
+        binding.oCardTitle.setTextColor(ContextCompat.getColor(requireContext(),
+            R.color.black))
+        binding.IVXArrow.visibility = View.VISIBLE
+        binding.IVOArrow.visibility = View.GONE
+        numberOfOccupiedCells = 0
+        result = ""
+    }
+
 }
