@@ -8,17 +8,25 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.tengizmkcorp.tic_tac_toe.databinding.CellItemBinding
 import com.tengizmkcorp.tic_tac_toe.ui.model.Cell
 
-class CellItemAdapter(private val items: MutableList<Cell>) :
+class CellItemAdapter(
+    private val items: MutableList<Cell>,
+    val clickFun: (item: Cell, pos: Int) -> Unit
+    ) :
     RecyclerView.Adapter<CellItemAdapter.CellItemViewHolder>() {
     inner class CellItemViewHolder(private val binding: CellItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Cell) {
+            val pos = bindingAdapterPosition
             if (!item.xVisibility)
             binding.IVX.visibility = View.INVISIBLE
             else  binding.IVX.visibility = View.VISIBLE
             if (!item.oVisibility)
                 binding.IVO.visibility = View.INVISIBLE
             else  binding.IVO.visibility = View.VISIBLE
+
+            binding.root.setOnClickListener {
+                clickFun(item, pos)
+            }
         }
     }
 
