@@ -18,6 +18,7 @@ class GameFragment : BaseFragment<FragmentGameBinding>(FragmentGameBinding::infl
     private var cellList = mutableListOf<Cell>()
     private var numberOfOccupiedCells = 0
     private var gameOver = false
+    private var result = ""
     override fun setup() {
         setupRecycler()
     }
@@ -61,6 +62,25 @@ class GameFragment : BaseFragment<FragmentGameBinding>(FragmentGameBinding::infl
             }
             cellItemAdapter.notifyDataSetChanged()
             numberOfOccupiedCells++
+            //check if any player has won
+            if(
+                (cellList[0].value==cellList[1].value && cellList[1].value == cellList[2].value)
+                || (cellList[0].value==cellList[3].value && cellList[3].value == cellList[6].value)
+                || (cellList[2].value==cellList[5].value && cellList[5].value == cellList[8].value)
+                || (cellList[1].value==cellList[4].value && cellList[4].value == cellList[7].value)
+                || (cellList[6].value==cellList[7].value && cellList[7].value == cellList[8].value)
+                || (cellList[3].value==cellList[4].value && cellList[4].value == cellList[5].value)
+                || (cellList[0].value==cellList[4].value && cellList[4].value == cellList[8].value)
+                || (cellList[2].value==cellList[5].value && cellList[5].value == cellList[6].value)
+            ) {
+                result = if(binding.IVOArrow.visibility == View.VISIBLE)
+                    "Player 1 won"
+                else "Player 2 won"
+            }
+            else if(numberOfOccupiedCells==9)
+            {
+                result = "Game over, Tie"
+            }
         }
     }
 
