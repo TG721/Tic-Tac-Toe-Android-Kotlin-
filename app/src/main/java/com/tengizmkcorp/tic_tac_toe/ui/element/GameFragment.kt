@@ -82,9 +82,11 @@ class GameFragment : BaseFragment<FragmentGameBinding>(FragmentGameBinding::infl
                 result = if (binding.IVOArrow.visibility == View.VISIBLE)
                     "Player 1 won"
                 else "Player 2 won"
+                binding.RVgame.isClickable = false
                 callAlertDialog(result)
             } else if (numberOfOccupiedCells == 9) {
                 result = "Tie"
+                binding.RVgame.isClickable = false
                 callAlertDialog(result)
             }
         }
@@ -95,8 +97,11 @@ class GameFragment : BaseFragment<FragmentGameBinding>(FragmentGameBinding::infl
             .setTitle("Game Over")
             .setMessage(result)
             .setNeutralButton("Close", DialogInterface.OnClickListener { _, _ ->
-                for (i in 0..8) clearCells()
+                clearCells()
             })
+            .setOnDismissListener {
+                clearCells()
+            }
 
         val dialog = builder.create()
         dialog.window!!.attributes.windowAnimations = R.style.DialogBoxAnimation
@@ -115,6 +120,7 @@ class GameFragment : BaseFragment<FragmentGameBinding>(FragmentGameBinding::infl
         binding.IVOArrow.visibility = View.GONE
         numberOfOccupiedCells = 0
         result = ""
+        binding.RVgame.isClickable = true
     }
 
 }
