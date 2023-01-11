@@ -1,7 +1,11 @@
 package com.tengizmkcorp.tic_tac_toe.ui.element
 
+import android.graphics.Typeface
+import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tengizmkcorp.tic_tac_toe.R
 import com.tengizmkcorp.tic_tac_toe.databinding.FragmentGameBinding
 import com.tengizmkcorp.tic_tac_toe.ui.adapter.CellItemAdapter
 import com.tengizmkcorp.tic_tac_toe.ui.common.BaseFragment
@@ -38,10 +42,22 @@ class GameFragment : BaseFragment<FragmentGameBinding>(FragmentGameBinding::infl
             if (numberOfOccupiedCells % 2 == 0) {
                 cellList[pos].xVisibility = true
                 cellList[pos].value = VALUES.X
+                binding.xCardTitle.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+//                binding.oCardTitle.setTypeface(null, Typeface.BOLD);
+//                binding.xCardTitle.setTypeface(null, Typeface.NORMAL);
+                binding.oCardTitle.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                binding.IVOArrow.visibility = View.VISIBLE
+                binding.IVXArrow.visibility = View.GONE
             }
             else {
                 cellList[pos].oVisibility = true
                 cellList[pos].value = VALUES.O
+//                binding.xCardTitle.setTypeface(null, Typeface.BOLD);
+//                binding.oCardTitle.setTypeface(null, Typeface.NORMAL);
+                binding.xCardTitle.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                binding.oCardTitle.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                binding.IVXArrow.visibility = View.VISIBLE
+                binding.IVOArrow.visibility = View.GONE
             }
             cellItemAdapter.notifyDataSetChanged()
             numberOfOccupiedCells++
