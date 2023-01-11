@@ -1,17 +1,24 @@
 package com.tengizmkcorp.tic_tac_toe.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.tengizmkcorp.tic_tac_toe.databinding.CellItemBinding
+import com.tengizmkcorp.tic_tac_toe.ui.model.Cell
 
-class CellItemAdapter(private val size: Int) :
+class CellItemAdapter(private val items: MutableList<Cell>) :
     RecyclerView.Adapter<CellItemAdapter.CellItemViewHolder>() {
-    inner class CellItemViewHolder(binding: CellItemBinding) :
+    inner class CellItemViewHolder(private val binding: CellItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind() {
-
+        fun bind(item: Cell) {
+            if (!item.xVisibility)
+            binding.IVX.visibility = View.INVISIBLE
+            else  binding.IVX.visibility = View.VISIBLE
+            if (!item.oVisibility)
+                binding.IVO.visibility = View.INVISIBLE
+            else  binding.IVO.visibility = View.VISIBLE
         }
     }
 
@@ -26,11 +33,11 @@ class CellItemAdapter(private val size: Int) :
     }
 
     override fun onBindViewHolder(holder: CellItemViewHolder, position: Int) {
-        holder.bind()
+        holder.bind(items[position])
     }
 
     override fun getItemCount(): Int {
-        return size
+        return items.size
     }
 
 
