@@ -3,6 +3,7 @@ package com.tengizmkcorp.tic_tac_toe.ui.element
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.graphics.drawable.ColorDrawable
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -120,6 +121,8 @@ class GameFragment : BaseFragment<FragmentGameBinding>(FragmentGameBinding::infl
             }
 
         val dialog = builder.create()
+        val window = dialog.window
+        window?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.white_partly_transparent)))
         dialog.window!!.attributes.windowAnimations = R.style.DialogBoxAnimation
         dialog.show()
     }
