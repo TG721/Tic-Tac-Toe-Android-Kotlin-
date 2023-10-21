@@ -3,10 +3,12 @@ package com.tengizmkcorp.tic_tac_toe.ui.element
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tengizmkcorp.tic_tac_toe.R
 import com.tengizmkcorp.tic_tac_toe.databinding.FragmentGameBinding
 import com.tengizmkcorp.tic_tac_toe.ui.adapter.CellItemAdapter
@@ -33,6 +35,20 @@ class GameFragment : BaseFragment<FragmentGameBinding>(FragmentGameBinding::infl
             placeTheMove(item, pos)
         }
         val recycler = binding.RVgame
+        recycler.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                // Disable multi-touch (multiple items selected at once)
+                return e.pointerCount > 1
+            }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
+                // Handle touch events if needed
+            }
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+                // Handle request to disallow intercept touch events if needed
+            }
+        })
         recycler.layoutManager =
             GridLayoutManager(requireContext(), 3, LinearLayoutManager.VERTICAL, false)
         recycler.adapter = cellItemAdapter
