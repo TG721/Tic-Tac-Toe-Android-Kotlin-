@@ -41,7 +41,7 @@ class CellItemAdapter(
                     clickHandler.postDelayed({
                         isClickEnabled = true
                     }, 300)
-                } else {
+                } else if(!item.xVisibility && !item.oVisibility) {
                     Toast.makeText(binding.root.context, "Not so fast", Toast.LENGTH_SHORT).show()
                 }
             }
